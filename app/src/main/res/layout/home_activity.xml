@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/grey"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <ImageView
+                    android:id="@+id/iv_menu_left"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/menu" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_search"
+                    android:layout_toRightOf="@+id/iv_menu_left"
+                    android:text="S14"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_menu_left"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/ic_logo_s14" />
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_search"
+                    android:selectAllOnFocus="false"
+                    android:text=""
+                    android:hint="Tìm kiếm phim..."
+                    android:textColorHint="#FFFFFF"
+                    android:textColor="#FFFFFF"/>
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/tim_kiem" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="48dp"
+                android:orientation="vertical">
+
+                <com.ogaclejapan.smarttablayout.SmartTabLayout
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/distance48dp"
+                    android:background="@color/pink"
+                    android:paddingBottom="4dp"
+                    android:visibility="gone"
+                    app:stl_defaultTabTextColor="@color/white"
+                    app:stl_distributeEvenly="true"
+                    app:stl_indicatorColor="@color/pink"
+                    app:stl_indicatorCornerRadius="1.5dp"
+                    app:stl_indicatorInterpolation="smart"
+                    app:stl_indicatorThickness="3dp"
+                    app:stl_underlineColor="@color/transparent" />
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:isScrollContainer="false" />
+            </LinearLayout>
+
+            <com.rey.material.widget.SnackBar
+                android:id="@+id/sb_toast"
+                style="@style/SnackBarSingleLine"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:visibility="invisible"
+                app:sb_actionTextColor="@color/white"
+                app:sb_textColor="@color/white" />
+
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="@dimen/distance24dp"
+                    android:layout_height="@dimen/distance24dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_videos" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="@dimen/distance24dp"
+                    android:layout_height="@dimen/distance24dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_videos" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="@dimen/distance24dp"
+                    android:layout_height="@dimen/distance24dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_videos" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="@dimen/distance24dp"
+                    android:layout_height="@dimen/distance24dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_videos" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="@dimen/distance24dp"
+                    android:layout_height="@dimen/distance24dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_videos" />
+            </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_left_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/background_home"
+        android:choiceMode="singleChoice"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/iv_logo_app_1"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_centerInParent="true"
+                android:layout_margin="4dp"
+                android:src="@drawable/avatar_dangki" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_login"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_toRightOf="@+id/iv_logo_app_1"-->
+                <!--android:text="Đăng ký/Đăng nhập"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="18dp" />-->
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_logon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_logo_app"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="4dp"
+                android:src="@drawable/ic_user"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:id="@+id/fl_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="4dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_avatar" />
+
+                <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                    android:id="@+id/psiv_avatar"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="centerCrop"
+                    app:siShape="@drawable/ic_avatar_1"
+                    app:siSquare="true" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_toRightOf="@+id/fl_wrapper"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    style="@style/TitleUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MINH ĐỨC UY" />
+
+                <TextView
+                    android:id="@+id/tv_user_type"
+                    style="@style/InfoUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khách VIP"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_user_bonus"
+                    style="@style/InfoUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1000 bonus"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_edit"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_margin="8dp"
+                android:layout_toRightOf="@+id/ll_wrapper"
+                android:src="@drawable/ic_edit"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="4dp"
+                android:layout_toRightOf="@+id/iv_edit"
+                android:src="@drawable/ic_logout" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/iv_logo_app"
+                android:padding="@dimen/distance24dp"
+                android:text="PHIMHOT"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lv_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@drawable/background_home"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent" />
+
+    </LinearLayout>
+</android.support.v4.widget.DrawerLayout>

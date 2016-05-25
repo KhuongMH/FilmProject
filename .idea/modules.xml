@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HListView/HListView.iml" filepath="$PROJECT_DIR$/HListView/HListView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LibraryLinearListView/LibraryLinearListView.iml" filepath="$PROJECT_DIR$/LibraryLinearListView/LibraryLinearListView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WebFilm.iml" filepath="$PROJECT_DIR$/WebFilm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/calligraphy/calligraphy.iml" filepath="$PROJECT_DIR$/calligraphy/calligraphy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dynamicgrid/dynamicgrid.iml" filepath="$PROJECT_DIR$/dynamicgrid/dynamicgrid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easyadapter-1.4.0/easyadapter-1.4.0.iml" filepath="$PROJECT_DIR$/easyadapter-1.4.0/easyadapter-1.4.0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hlistview-1.3.1/hlistview-1.3.1.iml" filepath="$PROJECT_DIR$/hlistview-1.3.1/hlistview-1.3.1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library-1.1.5/library-1.1.5.iml" filepath="$PROJECT_DIR$/library-1.1.5/library-1.1.5.iml" />
+    </modules>
+  </component>
+</project>

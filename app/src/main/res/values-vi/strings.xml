@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">S14</string>
+    <string name="choose_file">Chọn file</string>
+    <string name="empty_directory">Thư mục rỗng</string>
+    <string name="error_field_required">Không được để trống</string>
+    <string name="error_incorrect_password">Sai password</string>
+    <string name="error_invalid_email">Email không hợp lệ</string>
+    <string name="error_invalid_password">Pass quá ngắn</string>
+    <string name="error_selecting_file">Lỗi khi chọn file</string>
+    <string name="action_sign_in_short">Đăng nhập</string>
+    <string name="action_sign_in"></string>
+    <string name="action_settings">Cấu hình</string>
+    <string name="internal_storage">Bộ nhớ trong</string>
+    <string name="prompt_password">Password (không bắt buộc)</string>
+    <string name="storage_removed">Bộ nhớ đã bị xóa</string>
+    <string name="prompt_email">Email</string>
+    <string name="title_activity_login">Đăng nhập</string>
+    <string name="title_activity_maps">Bản Đồ</string>
+</resources>

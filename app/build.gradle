@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+    defaultConfig {
+        applicationId "vn.app.phims14"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 5
+        versionName '1.7.1'
+    }
+    defaultConfig {
+        multiDexEnabled = true
+        buildConfigField "String", "FACEBOOK_BANNER_AD_ID", FACEBOOK_BANNER_ADS_ID
+        buildConfigField "String", "FACEBOOK_INLIST_ADS_ID", FACEBOOK_INLIST_ADS_ID
+        buildConfigField "String", "FACEBOOK_INTERSTITIALS_ADS_ID", FACEBOOK_INTERSTITIALS_ADS_ID
+        buildConfigField "String", "ADMOB_BANNER_AD_ID", ADMOB_BANNER_AD_ID
+        buildConfigField "String", "ADMOB_INTERSTITIAL_AD_ID", ADMOB_INTERSTITIAL_AD_ID
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+    dexOptions {
+        javaMaxHeapSize "2048M"
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':calligraphy')
+    compile project(':LibraryLinearListView')
+    compile project(':easyadapter-1.4.0')
+    compile('com.squareup.retrofit:converter-simplexml:1.9.0') {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
+    compile('com.ogaclejapan.smarttablayout:library:1.6.0') {
+        exclude module: 'appcompat-v7'
+    }
+    compile project(':dynamicgrid')
+    compile project(':HListView')
+    compile('io.realm:realm-android:0.87.5') {
+        exclude module: 'butterknife'
+    }
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.squareup.picasso:picasso:2.3.4'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.github.rey5137:material:1.2.1'
+    compile 'com.github.techery:ProperRatingBar:v0.0.3'
+    compile 'com.github.aakira:expandable-layout:1.5.0@aar'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    compile 'com.facebook.android:audience-network-sdk:4.6.0'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'org.jsoup:jsoup:1.8.3'
+    compile group: 'com.loopj.android', name: 'android-async-http', version: '1.4.9'
+}

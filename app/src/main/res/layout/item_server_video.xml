@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_server_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TitleCategory" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <it.sephiroth.android.library.widget.HListView
+            android:id="@+id/hl_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></it.sephiroth.android.library.widget.HListView>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_load"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_menu"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/grey">
+
+        <ImageView
+            android:id="@+id/iv_category"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_logo_s14" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_toLeftOf="@+id/iv_back"
+            android:layout_toRightOf="@+id/iv_category"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_gradient_title">
+                <RelativeLayout
+                    android:id="@+id/ll_wrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_rate"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/background_rate"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/item_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tv_rate"
+                        android:padding="1dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+
+
+                    <io.techery.properratingbar.ProperRatingBar
+                        android:id="@+id/rb_vote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/item_title"
+                        android:layout_toRightOf="@+id/tv_rate"
+                        android:gravity="center"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:prb_symbolicTick="☆"
+                        app:prb_symbolicTickNormalColor="@color/white"
+                        app:prb_symbolicTickSelectedColor="@color/yellow"
+                        app:prb_totalTicks="5" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@+id/ll_wrapper"
+                android:background="#D92d63cf"
+                android:orientation="horizontal"
+                android:paddingTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.facebook.share.widget.LikeView
+                        android:id="@+id/likeView"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:textColor="#000000"
+                        android:layout_marginLeft="10dp"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+
+                    <ImageView
+                        android:id="@+id/iv_ic_view"
+                        android:layout_width="@dimen/distance24dp"
+                        android:layout_height="@dimen/distance24dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_view" />
+
+                    <TextView
+                        android:id="@+id/tv_view_film"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/iv_ic_view"
+                        android:layout_centerHorizontal="true"
+                        android:text="0"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_play_video"
+            android:visibility="gone" />
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_ic_type"
+                android:layout_width="@dimen/distance24dp"
+                android:layout_height="@dimen/distance24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_movie" />
+
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_ic_type"
+                android:layout_centerHorizontal="true"
+                android:text="Hành động"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_ic_country"
+                android:layout_width="@dimen/distance24dp"
+                android:layout_height="@dimen/distance24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_flag" />
+
+            <TextView
+                android:id="@+id/tv_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_ic_country"
+                android:layout_centerHorizontal="true"
+                android:text="Việt Nam"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_ic_year"
+                android:layout_width="@dimen/distance24dp"
+                android:layout_height="@dimen/distance24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_calender" />
+
+            <TextView
+                android:id="@+id/tv_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_ic_year"
+                android:layout_centerHorizontal="true"
+                android:text="2016"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_ic_view1"
+                android:layout_width="@dimen/distance24dp"
+                android:layout_height="@dimen/distance24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_flag" />
+
+            <TextView
+                android:id="@+id/tv_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_ic_view1"
+                android:layout_centerHorizontal="true"
+                android:text="10.000"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.ogaclejapan.smarttablayout.SmartTabLayout
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/distance48dp"
+            android:background="@color/grey"
+            android:paddingBottom="4dp"
+            app:stl_customTabTextLayoutId="@layout/custom_tab_icon1"
+            app:stl_customTabTextViewId="@id/custom_tab_icon"
+            app:stl_distributeEvenly="true"
+            app:stl_indicatorColor="@color/yellow"
+            app:stl_indicatorCornerRadius="1.5dp"
+            app:stl_indicatorInterpolation="smart"
+            app:stl_indicatorThickness="3dp" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:isScrollContainer="false" />
+    </LinearLayout>
+
+
+</LinearLayout>

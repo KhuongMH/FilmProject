@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\Users\khuong.man\AndroidProjects\WebFilm\LibraryLinearListView\res"><file path="C:\Users\khuong.man\AndroidProjects\WebFilm\LibraryLinearListView\res\values\attrs.xml" qualifiers=""><declare-styleable name="LinearListView">
+        <attr name="android:entries"/>
+        <attr format="dimension" name="dividerThickness"/>
+    </declare-styleable></file></source><source path="C:\Users\khuong.man\AndroidProjects\WebFilm\LibraryLinearListView\build\generated\res\rs\release"/><source path="C:\Users\khuong.man\AndroidProjects\WebFilm\LibraryLinearListView\build\generated\res\resValues\release"/></dataSet><dataSet config="release"><source path="C:\Users\khuong.man\AndroidProjects\WebFilm\LibraryLinearListView\build-types\release\res"/></dataSet><mergedItems><configuration qualifiers=""><declare-styleable name="LinearListView"><attr name="android:entries"/><attr format="dimension" name="dividerThickness"/></declare-styleable></configuration></mergedItems></merger>

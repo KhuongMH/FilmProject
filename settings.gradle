@@ -1,0 +1,1 @@
+include ':app', ':LibraryLinearListView', ':calligraphy', ':easyadapter-1.4.0', ':dynamicgrid', ':library-1.1.5', ':hlistview-1.3.1', ':HListView'

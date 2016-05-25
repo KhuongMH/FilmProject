@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_switch"
+        android:layout_width="@dimen/distance24dp"
+        android:layout_height="@dimen/distance24dp"
+        android:src="@drawable/bk1"
+        android:visibility="gone" />
+
+  <!--  <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/expandableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ael_duration="300"
+        app:ael_orientation="vertical">-->
+
+        <FrameLayout
+            android:id="@+id/fl_slider"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#BBB0BEC5">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/banner_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout
+                android:id="@+id/banner_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|right"
+                app:stl_clickable="false"
+                app:stl_customTabTextLayoutId="@layout/custom_tab_circle"
+                app:stl_dividerColor="@color/transparent"
+                app:stl_dividerThickness="0dp"
+                app:stl_indicatorColor="@color/pink"
+                app:stl_indicatorCornerRadius="4dp"
+                app:stl_indicatorGravity="center"
+                app:stl_indicatorInterpolation="linear"
+                app:stl_indicatorThickness="8dp"
+                app:stl_underlineColor="@color/transparent"
+                app:stl_underlineThickness="0dp" />
+        </FrameLayout>
+    <!--</com.github.aakira.expandablelayout.ExpandableRelativeLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ListView
+                android:id="@+id/lv_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></ListView>
+        </LinearLayout>
+
+
+        <!--<org.askerov.dynamicgrid.DynamicGridView
+            android:id="@+id/dynamic_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="2" />-->
+    </LinearLayout>
+</LinearLayout>

@@ -2,6 +2,7 @@ package vn.app.phims14.Module.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +32,7 @@ import vn.app.phims14.R;
  * Created by Minh on 4/12/2016.
  */
 @SuppressLint("ValidFragment")
-public class VideoFragment extends BaseFragment {
+public class VideoFragment extends Fragment {
     ImageView ivThumb;
     TextView ivName;
     LinearListView lvServer;

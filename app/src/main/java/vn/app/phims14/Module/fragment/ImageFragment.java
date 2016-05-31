@@ -1,8 +1,8 @@
 package vn.app.phims14.Module.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +14,13 @@ import com.squareup.picasso.Picasso;
 import butterknife.ButterKnife;
 import io.techery.properratingbar.ProperRatingBar;
 import vn.app.phims14.Classes.Movie;
-import vn.app.phims14.Module.DetailVideoActivity;
 import vn.app.phims14.R;
 
 /**
  * Created by Minh on 3/29/2016.
  */
 @SuppressLint("ValidFragment")
-public class ImageFragment extends BaseFragment {
+public class ImageFragment extends Fragment {
     TextView itemTitle;
     ImageView ivLike;
     TextView tvLike;

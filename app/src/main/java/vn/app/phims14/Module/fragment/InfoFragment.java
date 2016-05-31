@@ -2,6 +2,7 @@ package vn.app.phims14.Module.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,19 +25,13 @@ import vn.app.phims14.R;
  * Created by Minh on 4/12/2016.
  */
 @SuppressLint("ValidFragment")
-public class InfoFragment extends BaseFragment {
-
-    static final String TAG = InfoFragment.class.getName();
+public class InfoFragment extends Fragment {
 
     TextView tvFilmTitle;
     TextView tvFilmStatus;
     TextView tvFilmAuthor;
     TextView tvFilmCountry;
     TextView tvFilmYear;
-    ImageView ivFacebook;
-    ImageView ivGoogle;
-    ImageView ivThumb;
-    TextView ivName;
     HListView lvActor;
     TextView tvDescription;
 
@@ -76,7 +71,7 @@ public class InfoFragment extends BaseFragment {
         }
         tvDescription.setText(description);
 
-        personDAOEasyAdapter = new EasyAdapter<Actor>(getContext(), ActorAdapter.class, info.getActors());
+        personDAOEasyAdapter = new EasyAdapter<>(getContext(), ActorAdapter.class, info.getActors());
         lvActor.setAdapter(personDAOEasyAdapter);
 
         return view;

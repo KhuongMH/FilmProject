@@ -43,7 +43,7 @@ import vn.app.phims14.R;
  * Created by Minh on 3/29/2016.
  */
 //public class HomeFragment<T> extends BaseFragment implements ApiFilmListener {
-public class HomeFragment<T> extends BaseFragment {
+public class HomeFragment extends Fragment {
 
     SmartTabLayout smartTabLayout;
     ViewPager viewPager;
@@ -55,7 +55,7 @@ public class HomeFragment<T> extends BaseFragment {
     public static List<MainPageBanner> mainPageBanners = new ArrayList<>();
     public static int BANNER_NUMBER = 0;
     ProgressDialog progressDialog;
-    private List<BaseFragment> mScreenList;
+    private List<Fragment> mScreenList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,8 +88,8 @@ public class HomeFragment<T> extends BaseFragment {
         return view;
     }
 
-    private BaseFragment getScreen(int position) {
-        BaseFragment screen = null;
+    private Fragment getScreen(int position) {
+        Fragment screen = null;
         do {
             if (position > 3 || position < 0)
                 break;

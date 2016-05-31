@@ -12,8 +12,10 @@ import android.widget.LinearLayout;
 import com.facebook.ads.AbstractAdListener;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AdSettings;
 import com.facebook.ads.AdView;
 import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 import com.facebook.ads.NativeAd;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import vn.app.phims14.BuildConfig;
+import vn.app.phims14.Classes.GlobalVariable;
 
 
 /**
@@ -133,14 +135,14 @@ public class AdsManager {
         long regID = 0;
         switch (adStock) {
             case Facebook: {
-                regID = loadIntelFbk(BuildConfig.FACEBOOK_INTERSTITIALS_ADS_ID, listener);
+                regID = loadIntelFbk(GlobalVariable.FACEBOOK_INTERSTITIALS_ADS_ID, listener);
                 break;
             }
 
-            case Admob: {
-                regID = loadIntelAdmob(BuildConfig.ADMOB_INTERSTITIAL_AD_ID, listener);
-                break;
-            }
+//            case Admob: {
+//                regID = loadIntelAdmob(Constant.ADMOB_INTERSTITIAL_AD_ID, listener);
+//                break;
+//            }
 
             default:
                 break;
@@ -212,42 +214,33 @@ public class AdsManager {
 
             try {
                 ad = new InterstitialAd(mActivity, facebookID);
-                ad.setAdListener(new com.facebook.ads.InterstitialAdListener() {
+                ad.setAdListener(new InterstitialAdListener() {
                     @Override
-                    public void onInterstitialDisplayed(com.facebook.ads.Ad ad) {
+                    public void onInterstitialDisplayed(Ad ad) {
+
                     }
 
                     @Override
-                    public void onInterstitialDismissed(com.facebook.ads.Ad ad) {
-                        listener.onAdDismissed();
+                    public void onInterstitialDismissed(Ad ad) {
+
                     }
 
                     @Override
-                    public void onError(com.facebook.ads.Ad ad, com.facebook.ads.AdError adError) {
-                        String msgErr = String.format(Locale.US,
-                                "Load interstitial FB fail [%s] - %s",
-                                adError.getErrorCode(), adError.getErrorMessage());
-                        // Register reload Ad
-                        mRequestsReload.add(listener);
-                        Log.e(TAG, msgErr);
+                    public void onError(Ad ad, AdError adError) {
 
-                        listener.onAdError(adError.getErrorCode(), msgErr);
                     }
 
                     @Override
-                    public void onAdLoaded(com.facebook.ads.Ad ad) {
-                        // Unregister reload
-                        if (mRequestsReload.contains(listener))
-                            mRequestsReload.remove(listener);
-
-                        listener.onAdLoaded();
+                    public void onAdLoaded(Ad ad) {
+//                        ad.show();
                     }
 
                     @Override
-                    public void onAdClicked(com.facebook.ads.Ad ad) {
+                    public void onAdClicked(Ad ad) {
+
                     }
                 });
-
+                AdSettings.addTestDevice("5aba0a3b323aabac517ae6575d35c588");
                 ad.loadAd();
             } catch (Exception ex) {
                 Log.e(TAG, ex.getMessage());
@@ -392,12 +385,12 @@ public class AdsManager {
 
             switch (adStock) {
                 case Facebook: {
-                    regID = loadFbkBanner(BuildConfig.FACEBOOK_BANNER_AD_ID, rootView, listener);
+                    regID = loadFbkBanner(GlobalVariable.FACEBOOK_BANNER_AD_ID, rootView, listener);
                     break;
                 }
 
                 case Admob: {
-                    regID = loadAdmobBanner(BuildConfig.ADMOB_BANNER_AD_ID, rootView, listener);
+                    regID = loadAdmobBanner(GlobalVariable.ADMOB_BANNER_AD_ID, rootView, listener);
                     break;
                 }
 
@@ -531,7 +524,7 @@ public class AdsManager {
         long regID = 0;
         switch (adStock) {
             case Facebook: {
-                regID = loadNavFbk(BuildConfig.FACEBOOK_INLIST_ADS_ID, listener);
+                regID = loadNavFbk(GlobalVariable.FACEBOOK_INLIST_ADS_ID, listener);
                 break;
             }
             default:

@@ -4,7 +4,10 @@ package vn.app.phims14.Module;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -15,44 +18,43 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
+
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import com.rey.material.widget.SnackBar;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import uk.co.ribot.easyadapter.EasyAdapter;
+import vn.app.phims14.Classes.Advertisement;
 import vn.app.phims14.Classes.Category;
-import vn.app.phims14.Classes.Constant;
-import vn.app.phims14.Global.Global;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Helper.ads.AdsManager;
 import vn.app.phims14.Module.fragment.CategoryAdapter;
 import vn.app.phims14.Module.fragment.HomeFragment;
@@ -68,13 +70,16 @@ import vn.app.phims14.R;
 public class HomeActivity extends FragmentActivity {
 
     private static final String TAG = HomeActivity.class.getName();
-    ImageView ivSearch, ivEdit, ivBack, ivMenuLeft;
-    TextView tvUserName,tvLogin;
-    RelativeLayout rlLogin, rlLogon;
+    public static CallbackManager callbackManager;
+    ImageView ivSearch,ivMenuLeft, ivlogo;
+    TextView tvLogin, tvUsername, tvUserPoint;
+    RelativeLayout rlLogin;
+    LinearLayout lluserLogin;
     DrawerLayout mDrawerLayout;
     ListView lvCategory;
     EditText et_search;
     ViewPager pager;
+    AdView mAdView;
     static SnackBar sbToast;
 
     private ActionBarDrawerToggle mDrawerToggle;
@@ -91,25 +96,35 @@ public class HomeActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalVariable.APPLICATION_CONTEXT = getApplicationContext();
         FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.home_activity);
         lvCategory = (ListView) findViewById(R.id.lv_category);
         et_search = (EditText) findViewById(R.id.et_search);
         ivMenuLeft = (ImageView) findViewById(R.id.iv_menu_left);
-        ivBack = (ImageView) findViewById(R.id.iv_back);
         pager = (ViewPager) findViewById(R.id.pager);
-        rlLogon = (RelativeLayout) findViewById(R.id.rl_logon);
         rlLogin = (RelativeLayout) findViewById(R.id.rl_login);
-//        tvLogin = (TextView) findViewById(R.id.tv_login);
-        tvUserName = (TextView) findViewById(R.id.tv_user_name);
-        ivEdit = (ImageView) findViewById(R.id.iv_edit);
+        lluserLogin = (LinearLayout) findViewById(R.id.user_info);
+        tvLogin = (TextView) findViewById(R.id.tv_login);
+        tvUsername = (TextView) findViewById(R.id.tv_username);
+        tvUserPoint = (TextView) findViewById(R.id.tv_userpoint);
         ivSearch = (ImageView) findViewById(R.id.iv_search);
+        ivlogo = (ImageView) findViewById(R.id.iv_logo_app_1);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Constant.PREFERENCES = getApplicationContext().getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
-        Constant.PREF_EDITOR = Constant.PREFERENCES.edit();
+        GlobalVariable.PREFERENCES = getApplicationContext().getSharedPreferences(getResources().getString(R.string.app_name), MODE_PRIVATE);
+        GlobalVariable.PREF_EDITOR = GlobalVariable.PREFERENCES.edit();
+
+
+
+        MobileAds.initialize(this, GlobalVariable.ADMOB_INTERSTITIAL_AD_ID);
+        mAdView = (AdView) findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
 
         //Khởi chạy thread lấy dữ liệu Category trên server.
-        String tmp = Constant.PREFERENCES.getString("Categories", "");
+        String tmp = GlobalVariable.PREFERENCES.getString("Categories", "");
         if (tmp.isEmpty()) {
             new getCategory().execute();
         } else {
@@ -119,7 +134,6 @@ public class HomeActivity extends FragmentActivity {
 
         ButterKnife.bind(this);
         mAds = new AdsManager(this, mAdtockDefault);
-        sbToast = (SnackBar) findViewById(R.id.sb_toast);
         mDrawerToggle = new ActionBarDrawerToggle(HomeActivity.this, mDrawerLayout,
                 R.drawable.ic_launcher, R.string.app_name, R.string.app_name);
         ivMenuLeft.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +143,7 @@ public class HomeActivity extends FragmentActivity {
             }
         });
 
-        int width = getResources().getDisplayMetrics().widthPixels/3*2;
+        int width = getResources().getDisplayMetrics().widthPixels / 3 * 2;
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) lvCategory.getLayoutParams();
         params.width = width;
         lvCategory.setLayoutParams(params);
@@ -140,7 +154,7 @@ public class HomeActivity extends FragmentActivity {
         ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_search.getText().toString().isEmpty()) return;
+                if (et_search.getText().toString().isEmpty()) return;
                 Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
                 intent.putExtra("searchText", et_search.getText().toString());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -148,54 +162,71 @@ public class HomeActivity extends FragmentActivity {
             }
         });
 
-        tvUserName.setOnClickListener(new View.OnClickListener() {
+        tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
 
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(HomeActivity.this)
-                        .setTitle("Đăng xuất")
-                        .setMessage("Bạn muốn Đăng xuất tài khoản không?")
-                        .setPositiveButton(android.R.string.yes,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        //LoadAds();
-                                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                })
-                        .setNegativeButton(android.R.string.no,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        return;
-                                    }
-                                }).setIcon(android.R.drawable.ic_dialog_alert).show();
-            }
-        });
+        String info = GlobalVariable.PREFERENCES.getString("InfoFacebook", "");
+        if(!info.isEmpty()){
+            updateUserInfo(info);
+        }
+    }
 
-//        tvLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//            }
-//        });
+    private void updateUserInfo(String infoFacebook) {
+        tvLogin.setVisibility(View.GONE);
+        lluserLogin.setVisibility(View.VISIBLE);
+        try {
+            JSONObject object = new JSONObject(infoFacebook);
+            tvUsername.setText(object.getString("name"));
+            tvUserPoint.setText("0");
+            Picasso.with(this).load(object.getJSONObject("picture").getJSONObject("data").getString("url"))
+                    .transform(new CircleTransform()).into(ivlogo);
+        } catch (Exception e) {
+
+        }
+    }
+
+    public class CircleTransform implements Transformation {
+        @Override
+        public Bitmap transform(Bitmap source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+            if (squaredBitmap != source) {
+                source.recycle();
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            BitmapShader shader = new BitmapShader(squaredBitmap,
+                    BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+
+            squaredBitmap.recycle();
+            return bitmap;
+        }
+
+        @Override
+        public String key() {
+            return "circle";
+        }
     }
 
     public void setupUI() {
-        Global.getInstance().setCategoryDAOArrayList(categories);
         mScreenList.clear();
         mScreenList.add(new HomeFragment());
         FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
@@ -230,7 +261,7 @@ public class HomeActivity extends FragmentActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int which) {
-                                LoadAds();
+                                new Advertisement(HomeActivity.this, GlobalVariable.FACEBOOK_INTERSTITIALS_ADS_ID).LoadFacebookAds();
                                 finish();
                             }
                         })
@@ -245,78 +276,33 @@ public class HomeActivity extends FragmentActivity {
 
     EasyAdapter<Category> categoryDAOEasyAdapter;
 
-    public void LoadAds() {
-        long curTime = Calendar.getInstance().getTimeInMillis() / 1000;
-        if (curTime % 2 == 0)
-            LoadGoogleAds();
-        else {
-            LoadFacebookAds();
-        }
-    }
-
-    public void LoadFacebookAds() {
-        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Facebook, new AdsManager.AdListener() {
-            @Override
-            public void onAdError(int errCode, String msgErr) {
-
-            }
-
-            @Override
-            public void onAdDismissed() {
-
-            }
-
-            @Override
-            public void onAdLoaded() {
-                mAds.showInterstitialAd(mExitAdId);
-            }
-
-            @Override
-            public void onRequestReload() {
-
-            }
-        });
-    }
-
-    public Boolean LoadGoogleAds() {
-        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
-            @Override
-            public void onAdError(int errCode, String msgErr) {
-                LoadFacebookAds();
-            }
-
-            @Override
-            public void onAdDismissed() {
-
-            }
-
-            @Override
-            public void onAdLoaded() {
-                mAds.showInterstitialAd(mExitAdId);
-            }
-
-            @Override
-            public void onRequestReload() {
-
-            }
-        });
-        return true;
-    }
+//    public Boolean LoadGoogleAds() {
+//        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
+//            @Override
+//            public void onAdError(int errCode, String msgErr) {
+//                LoadFacebookAds();
+//            }
+//
+//            @Override
+//            public void onAdDismissed() {
+//
+//            }
+//
+//            @Override
+//            public void onAdLoaded() {
+//                mAds.showInterstitialAd(mExitAdId);
+//            }
+//
+//            @Override
+//            public void onRequestReload() {
+//
+//            }
+//        });
+//        return true;
+//    }
 
     public void checkLogin() {
 
-    }
-
-    public void showLogin() {
-        rlLogon.setVisibility(View.VISIBLE);
-        rlLogin.setVisibility(View.GONE);
-
-
-    }
-
-    public void showLogon() {
-        rlLogon.setVisibility(View.GONE);
-        rlLogin.setVisibility(View.VISIBLE);
     }
 
     public List<Category> ConvertJsonToCategories(String jsonString) {
@@ -333,7 +319,7 @@ public class HomeActivity extends FragmentActivity {
             JSONArray array = new JSONArray(jsonString);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject category = array.getJSONObject(i);
-                if(category.getInt("ProductParentId") != 1) continue;
+                if (category.getInt("ProductParentId") != 1) continue;
                 list.add(new Category(category.getString("Name"),
                         category.getString("Description"),
                         category.getString("Slug"),
@@ -366,8 +352,8 @@ public class HomeActivity extends FragmentActivity {
                 while ((temp = bReader.readLine()) != null) {
                     response += temp;
                 }
-                Constant.PREF_EDITOR.putString("Categories", response);
-                Constant.PREF_EDITOR.commit();
+                GlobalVariable.PREF_EDITOR.putString("Categories", response);
+                GlobalVariable.PREF_EDITOR.commit();
                 categories = ConvertJsonToCategories(response);
             } catch (MalformedURLException e) {
                 e.printStackTrace();

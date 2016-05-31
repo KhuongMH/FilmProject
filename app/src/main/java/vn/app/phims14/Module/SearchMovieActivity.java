@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import uk.co.ribot.easyadapter.EasyAdapter;
-import vn.app.phims14.Classes.Constant;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Classes.Movie;
 import vn.app.phims14.Module.fragment.MovieAdapter;
 import vn.app.phims14.R;
@@ -131,7 +131,7 @@ public class SearchMovieActivity extends Activity {
 
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(Constant.createQueryWithParameters(params));
+                writer.write(GlobalVariable.createQueryWithParameters(params));
                 writer.flush();
                 writer.close();
                 os.close();

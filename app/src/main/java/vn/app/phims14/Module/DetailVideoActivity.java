@@ -16,21 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.AppInviteContent;
-import com.facebook.share.model.ShareOpenGraphAction;
-import com.facebook.share.model.ShareOpenGraphContent;
-import com.facebook.share.model.ShareOpenGraphObject;
-import com.facebook.share.widget.AppInviteDialog;
 import com.facebook.share.widget.LikeView;
-import com.facebook.share.widget.SendButton;
-import com.facebook.share.widget.ShareButton;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.squareup.picasso.Picasso;
 
@@ -53,21 +40,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import io.techery.properratingbar.ProperRatingBar;
 import io.techery.properratingbar.RatingListener;
 import vn.app.phims14.Classes.Actor;
 import vn.app.phims14.Classes.Category;
-import vn.app.phims14.Classes.Constant;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Classes.Movie;
 import vn.app.phims14.Classes.MovieEpisode;
 import vn.app.phims14.Classes.MovieInfo;
 import vn.app.phims14.Classes.MovieServer;
-import vn.app.phims14.Global.Global;
-import vn.app.phims14.Module.fragment.BaseFragment;
 import vn.app.phims14.Module.fragment.InfoFragment;
 import vn.app.phims14.Module.fragment.ReviewFragment;
 import vn.app.phims14.Module.fragment.VideoFragment;
@@ -77,7 +60,7 @@ import vn.app.phims14.R;
  * Created by Minh on 4/12/2016.
  */
 public class DetailVideoActivity extends FragmentActivity {
-    TextView tvViewFilm, tvView, tvYear, tvCountry, tvType, tvRate, itemTitle, tvTitle;
+    TextView tvViewFilm, tvView, tvYear, tvCountry, tvType, tvRate, itemTitle, tvTitle, tvThanks;
     ImageView ivCover, ivBack;
     ProperRatingBar rbVote;
     SmartTabLayout indicator;
@@ -85,14 +68,14 @@ public class DetailVideoActivity extends FragmentActivity {
     LikeView likeView;
     MovieInfo info;
     ProgressDialog progressDialog;
-    List<BaseFragment> mScreenList;
-    CallbackManager callbackManager;
+    List<Fragment> mScreenList;
+    boolean isRate = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_movie_activity);
-        callbackManager = CallbackManager.Factory.create();
 
         tvViewFilm = (TextView) findViewById(R.id.tv_view_film);
         ivCover = (ImageView) findViewById(R.id.iv_cover);
@@ -104,16 +87,14 @@ public class DetailVideoActivity extends FragmentActivity {
         tvCountry = (TextView) findViewById(R.id.tv_country);
         tvType = (TextView) findViewById(R.id.tv_type);
         tvRate = (TextView) findViewById(R.id.tv_rate);
-        itemTitle = (TextView) findViewById(R.id.item_title);
+        tvThanks = (TextView) findViewById(R.id.tv_thanks);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         rbVote = (ProperRatingBar) findViewById(R.id.rb_vote);
         likeView = (LikeView) findViewById(R.id.likeView);
-        ButterKnife.bind(this);
         new getInfoMovie().execute();
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rate();
                 finish();
             }
         });
@@ -121,7 +102,6 @@ public class DetailVideoActivity extends FragmentActivity {
     }
 
     public void updateUI() {
-        Global.getInstance().setCurrentIDMovie(info.getId());
         setupScreenTabs();
         setupSmartLayout();
 
@@ -137,9 +117,44 @@ public class DetailVideoActivity extends FragmentActivity {
         tvTitle.setText(info.getTitle());
         tvRate.setText(info.getRate());
         Picasso.with(getParent()).load(info.getBanner()).into(ivCover);
-        tvViewFilm.setText(info.getView());
-        itemTitle.setText(info.getTitle());
-        rbVote.setRating((int) Double.parseDouble(info.getRate()));
+
+        String view = info.getView();
+        StringBuilder builder = new StringBuilder(view);
+        view = builder.reverse().toString();
+        String[] tmp = new String[view.length()];
+        for (int i = 0; i < view.length(); i++) {
+            tmp[i] = view.charAt(i) + "";
+        }
+        view = "";
+        for (int i = 0; i < tmp.length; i++) {
+            view += tmp[i];
+            if ((i + 1) % 3 == 0 && (i + 1) != tmp.length) view += ".";
+        }
+        builder = new StringBuilder(view);
+        tvViewFilm.setText(builder.reverse());
+
+
+        rbVote.setRating(0);
+        String status = GlobalVariable.PREFERENCES.getString(info.getId(), "");
+        if(!status.isEmpty()){
+            rbVote.setVisibility(View.GONE);
+            tvThanks.setVisibility(View.VISIBLE);
+        } else {
+            rbVote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            rbVote.setListener(new RatingListener() {
+                @Override
+                public void onRatePicked(ProperRatingBar properRatingBar) {
+                    new SubmitRating().execute(properRatingBar.getRating());
+                    rbVote.setVisibility(View.GONE);
+                    tvThanks.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     private void setupScreenTabs() {
@@ -154,8 +169,8 @@ public class DetailVideoActivity extends FragmentActivity {
         }
     }
 
-    private BaseFragment getScreen(int position) {
-        BaseFragment screen = null;
+    private Fragment getScreen(int position) {
+        Fragment screen = null;
         do {
             if (position > 3 || position < 0)
                 break;
@@ -210,11 +225,6 @@ public class DetailVideoActivity extends FragmentActivity {
         indicator.setViewPager(pager);
     }
 
-    //Chưa viết !!!
-    private void rate() {
-
-    }
-
     class getInfoMovie extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -243,7 +253,7 @@ public class DetailVideoActivity extends FragmentActivity {
 
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(Constant.createQueryWithParameters(params));
+                writer.write(GlobalVariable.createQueryWithParameters(params));
                 writer.flush();
                 writer.close();
                 os.close();
@@ -360,7 +370,7 @@ public class DetailVideoActivity extends FragmentActivity {
 
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(Constant.createQueryWithParameters(params));
+                writer.write(GlobalVariable.createQueryWithParameters(params));
                 writer.flush();
                 writer.close();
                 os.close();
@@ -403,6 +413,53 @@ public class DetailVideoActivity extends FragmentActivity {
         }
     }
 
+    public class SubmitRating extends AsyncTask<Integer, Void, String> {
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            String stringURL = "http://s14.com.vn/Mobile/Rating";
+            try {
+                URL url = new URL(stringURL);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(100000);
+                urlConnection.setConnectTimeout(30000);
+                urlConnection.setRequestMethod("POST");
+                List<NameValuePair> param = new ArrayList<>();
+                param.add(new BasicNameValuePair("videoid", info.getId()));
+                param.add(new BasicNameValuePair("rate", params[0] + ""));
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(GlobalVariable.createQueryWithParameters(param));
+                writer.flush();
+                writer.close();
+                os.close();
+
+                urlConnection.connect();
+                InputStream inStream = urlConnection.getInputStream();
+                BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+                String temp, response = "";
+                while ((temp = bReader.readLine()) != null) {
+                    response += temp;
+                }
+
+                return response;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if(s != null){
+                GlobalVariable.PREF_EDITOR.putString(info.getId(), "OK");
+                GlobalVariable.PREF_EDITOR.commit();
+                tvRate.setText(s);
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -412,14 +469,13 @@ public class DetailVideoActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        rate();
         finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        HomeActivity.callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

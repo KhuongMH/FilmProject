@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -48,9 +49,9 @@ import vn.app.phims14.UIComponent.CircleTransform;
  * Created by Minh on 4/12/2016.
  */
 @SuppressLint("ValidFragment")
-public class ReviewFragment<T> extends BaseFragment {
+public class ReviewFragment extends Fragment {
     MovieInfo info;
-    WebView webView, childView;
+    WebView webView;
     LinearLayout parentLayout;
     Activity MyActivity;
 

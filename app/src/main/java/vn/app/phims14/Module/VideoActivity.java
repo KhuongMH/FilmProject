@@ -6,10 +6,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
-import java.util.Calendar;
+
+import vn.app.phims14.Classes.Advertisement;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Helper.ads.AdsManager;
 import vn.app.phims14.R;
 
@@ -65,79 +66,38 @@ public class VideoActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            LoadAds();
+            new Advertisement(this, GlobalVariable.FACEBOOK_INTERSTITIALS_ADS_ID).LoadFacebookAds();
             finish();
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private void LoadAds() {
-        try {
-//            long curTime = Calendar.getInstance().getTimeInMillis() / 1000;
-//            if (curTime % 2 == 0)
-                LoadGoogleAds();
-//            else {
-//                LoadFacebookAds();
-//            }
-        } catch (Exception e) {
-
-        }
-    }
-
-    private void LoadFacebookAds() {
-        try {
-            mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Facebook, new AdsManager.AdListener() {
-                @Override
-                public void onAdError(int errCode, String msgErr) {
-
-                }
-
-                @Override
-                public void onAdDismissed() {
-
-                }
-
-                @Override
-                public void onAdLoaded() {
-                    mAds.showInterstitialAd(mExitAdId);
-                }
-
-                @Override
-                public void onRequestReload() {
-
-                }
-            });
-        } catch (Exception e) {
-
-        }
-    }
-
-    private Boolean LoadGoogleAds() {
-        try {
-            mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
-                @Override
-                public void onAdError(int errCode, String msgErr) {
-                    LoadFacebookAds();
-                }
-
-                @Override
-                public void onAdDismissed() {
-
-                }
-
-                @Override
-                public void onAdLoaded() {
-                    mAds.showInterstitialAd(mExitAdId);
-                }
-
-                @Override
-                public void onRequestReload() {
-
-                }
-            });
-        } catch (Exception e) {
-
-        }
-        return true;
-    }
+//    private Boolean LoadGoogleAds() {
+//        try {
+//            mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
+//                @Override
+//                public void onAdError(int errCode, String msgErr) {
+//                    LoadFacebookAds();
+//                }
+//
+//                @Override
+//                public void onAdDismissed() {
+//
+//                }
+//
+//                @Override
+//                public void onAdLoaded() {
+//                    mAds.showInterstitialAd(mExitAdId);
+//                }
+//
+//                @Override
+//                public void onRequestReload() {
+//
+//                }
+//            });
+//        } catch (Exception e) {
+//
+//        }
+//        return true;
+//    }
 }

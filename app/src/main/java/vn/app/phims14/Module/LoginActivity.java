@@ -2,6 +2,7 @@ package vn.app.phims14.Module;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,10 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
@@ -24,62 +23,58 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.R;
 
 /**
  * Created by Minh on 4/19/2016.
  */
-public class LoginActivity extends Activity{
-    @Bind(R.id.et_username)
-    EditText etUsername;
-    @Bind(R.id.et_password)
-    EditText etPassword;
-    @Bind(R.id.bt_login)
-    Button btLogin;
-    @Bind(R.id.bt_register)
-    Button btRegister;
-    @Bind(R.id.ic_back)
+public class LoginActivity extends Activity {
+    EditText etUsername, etPassword;
+    Button btLogin, btRegister;
     ImageView icBack;
-    @Bind(R.id.login_button)
     LoginButton loginButton;
-    @Bind(R.id.tv_register)
     TextView tvRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        facebookSDKInitialize();
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-
         checkLogin();
 
-        btLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkValidate()) {
-
-                }
-
-            }
-        });
-
-        tvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-
+//        btLogin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (checkValidate()) {
+//
+//                }
+//
+//            }
+//        });
+//
+//        tvRegister.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//            }
+//        });
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        tvRegister = (TextView) findViewById(R.id.tv_register);
+        icBack = (ImageView) findViewById(R.id.ic_back);
+        btRegister = (Button) findViewById(R.id.bt_register);
+        btLogin = (Button) findViewById(R.id.bt_login);
+        etPassword = (EditText) findViewById(R.id.et_password);
+        etUsername = (EditText) findViewById(R.id.et_username);
         loginButton.setReadPermissions("user_friends");
         loginButton.setReadPermissions("public_profile");
         loginButton.setReadPermissions("email");
@@ -154,15 +149,6 @@ public class LoginActivity extends Activity{
         return "";
     }
 
-
-    CallbackManager callbackManager;
-
-    protected void facebookSDKInitialize() {
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -192,7 +178,7 @@ public class LoginActivity extends Activity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        HomeActivity.callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     Bundle bFacebookData = null;
@@ -200,7 +186,7 @@ public class LoginActivity extends Activity{
     protected Bundle getLoginDetails(LoginButton login_button) {
 
         // Callback registration
-        login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        login_button.registerCallback(HomeActivity.callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult login_result) {
                 System.out.println("onSuccess");
@@ -212,27 +198,22 @@ public class LoginActivity extends Activity{
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         Log.i("LoginActivity", response.toString());
-                        // Get facebook data from login
-                        bFacebookData = getFacebookData(object);
+                        if (object.has("id")) new checkExistUser().execute(object);
                     }
                 });
 
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name, first_name, last_name, email,gender, birthday, location,picture"); // Parámetros que pedimos a facebook
+                parameters.putString("fields", "id,name, first_name, last_name, email,gender, birthday, location,picture");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
 
             @Override
             public void onCancel() {
-                // code for cancellation
-
             }
 
             @Override
             public void onError(FacebookException exception) {
-                //  code to handle error
-
             }
         });
         return bFacebookData;
@@ -258,53 +239,51 @@ public class LoginActivity extends Activity{
         return result;
     }
 
-    private Bundle getFacebookData(JSONObject object) {
-        Bundle bundle = new Bundle();
-        try {
-
-            String id = object.getString("id");
-
-            try {
-                URL profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?width=500&height=500");
-                Log.i("profile_pic", profile_pic + "");
-                bundle.putString("profile_pic", profile_pic.toString());
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            bundle.putString("idFacebook", id);
-            if (object.has("name"))
-                bundle.putString("name", object.getString("name"));
-            if (object.has("picture"))
-                bundle.putString("picture", object.getString("picture"));
-            if (object.has("first_name"))
-                bundle.putString("first_name", object.getString("first_name"));
-            if (object.has("last_name"))
-                bundle.putString("last_name", object.getString("last_name"));
-            if (object.has("email"))
-                bundle.putString("email", object.getString("email"));
-            if (object.has("gender"))
-                bundle.putString("gender", object.getString("gender"));
-            if (object.has("birthday"))
-                bundle.putString("birthday", object.getString("birthday"));
-            if (object.has("location"))
-                bundle.putString("location", object.getJSONObject("location").getString("name"));
-
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("InfoFacebook", bundle);
-            startActivity(intent);
-        } catch (Exception e) {
-
-        }
-        return bundle;
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    public class checkExistUser extends AsyncTask<JSONObject, Void, String>{
+        JSONObject tmp;
+        @Override
+        protected String doInBackground(JSONObject... params) {
+            tmp = params[0];
+            try {
+                String stringURL = "" + tmp.getString("id");
+                URL url = new URL(stringURL);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(10000);
+                urlConnection.setConnectTimeout(30000);
+                urlConnection.setRequestMethod("POST");
+                InputStream inStream = urlConnection.getInputStream();
+                BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
+                String temp, response = "";
+                while ((temp = bReader.readLine()) != null) {
+                    response += temp;
+                }
+                JSONObject object = new JSONObject(response);
+                if(object.has("response") && object.getInt("response") == 200){
+                    //Existed
+                    tmp = new JSONObject(response);
+                    return "1";
+                }
+            } catch (Exception e) {
+                return "1";
+            }
+
+            //Not existed
+            return "0";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            GlobalVariable.PREF_EDITOR.putString("InfoFacebook", tmp.toString());
+            GlobalVariable.PREF_EDITOR.commit();
+            startActivity(intent);
+        }
     }
 }

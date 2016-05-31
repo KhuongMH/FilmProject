@@ -35,9 +35,9 @@ public class CategoryAdapter extends ItemViewHolder<Category> {
         int productImageId = getContext().getResources().getIdentifier(
                 category.getSlug().replace("-", ""), "drawable", getContext().getPackageName());
         try {
-            Picasso.with(getContext()).load(productImageId).error(R.drawable.ic_movie).into(iv_Icon);
+            Picasso.with(getContext()).load(productImageId).error(R.drawable.phimbo).into(iv_Icon);
         }catch (Exception e){
-            Picasso.with(getContext()).load(R.drawable.ic_movie).into(iv_Icon);
+            Picasso.with(getContext()).load(R.drawable.phimbo).into(iv_Icon);
         }
         tvTitleCategory.setOnClickListener(new View.OnClickListener() {
             @Override

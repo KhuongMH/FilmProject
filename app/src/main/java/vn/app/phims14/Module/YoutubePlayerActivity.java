@@ -9,8 +9,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
-import java.util.Calendar;
-
+import vn.app.phims14.Classes.Advertisement;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Helper.ads.AdsManager;
 import vn.app.phims14.R;
 
@@ -131,66 +131,34 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        LoadAds();
+        new Advertisement(this, GlobalVariable.FACEBOOK_INTERSTITIALS_ADS_ID).LoadFacebookAds();
         finish();
     }
 
-    private void LoadAds() {
-//        long curTime = Calendar.getInstance().getTimeInMillis() / 1000;
-//        if (curTime % 2 == 0)
-            LoadGoogleAds();
-//        else {
-//            LoadFacebookAds();
-//        }
-    }
-
-    private void LoadFacebookAds() {
-        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Facebook, new AdsManager.AdListener() {
-            @Override
-            public void onAdError(int errCode, String msgErr) {
-
-            }
-
-            @Override
-            public void onAdDismissed() {
-
-            }
-
-            @Override
-            public void onAdLoaded() {
-                mAds.showInterstitialAd(mExitAdId);
-            }
-
-            @Override
-            public void onRequestReload() {
-
-            }
-        });
-    }
-
-    private Boolean LoadGoogleAds() {
-        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
-            @Override
-            public void onAdError(int errCode, String msgErr) {
-                LoadFacebookAds();
-            }
-
-            @Override
-            public void onAdDismissed() {
-
-            }
-
-            @Override
-            public void onAdLoaded() {
-                mAds.showInterstitialAd(mExitAdId);
-            }
-
-            @Override
-            public void onRequestReload() {
-
-            }
-        });
-        return true;
-    }
+//
+//    private Boolean LoadGoogleAds() {
+//        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
+//            @Override
+//            public void onAdError(int errCode, String msgErr) {
+//                LoadFacebookAds();
+//            }
+//
+//            @Override
+//            public void onAdDismissed() {
+//
+//            }
+//
+//            @Override
+//            public void onAdLoaded() {
+//                mAds.showInterstitialAd(mExitAdId);
+//            }
+//
+//            @Override
+//            public void onRequestReload() {
+//
+//            }
+//        });
+//        return true;
+//    }
 
 }

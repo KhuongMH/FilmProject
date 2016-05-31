@@ -18,6 +18,7 @@
     </string>
     <string name="google_maps_key">aaaa</string>
     <string name="facebook_app_id">885273401598948</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1616957174178533/8480151804</string>
 
     <!-- File Chooser -->
     <string name="empty_directory">Empty Directory</string>

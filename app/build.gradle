@@ -1,14 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'yupi'
+            keyPassword '26021993uy'
+            storePassword '26021993uy'
+            storeFile file('F:/hello/phims14release.jks')
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "vn.app.phims14"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 5
-        versionName '1.7.1'
+        versionCode 61112
+        versionName '1.2'
     }
     defaultConfig {
         multiDexEnabled = true
@@ -60,24 +68,19 @@ dependencies {
     compile('io.realm:realm-android:0.87.5') {
         exclude module: 'butterknife'
     }
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.android.support:multidex:1.0.0'
     compile 'com.github.rey5137:material:1.2.1'
     compile 'com.github.techery:ProperRatingBar:v0.0.3'
     compile 'com.github.aakira:expandable-layout:1.5.0@aar'
-    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services:9.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.facebook.android:audience-network-sdk:4.6.0'
-    compile 'com.google.android.gms:play-services-ads:8.4.0'
-    compile 'com.google.android.gms:play-services-analytics:8.4.0'
-    compile 'com.google.android.gms:play-services-identity:8.4.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.jsoup:jsoup:1.8.3'
     compile group: 'com.loopj.android', name: 'android-async-http', version: '1.4.9'
+    compile 'com.google.firebase:firebase-ads:9.0.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

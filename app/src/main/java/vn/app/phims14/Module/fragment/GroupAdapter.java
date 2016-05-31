@@ -30,7 +30,7 @@ public class GroupAdapter extends ItemViewHolder<Product> {
     @Override
     public void onSetValues(Product product, PositionInfo positionInfo) {
         tvTitle.setText(product.getTitle());
-        EasyAdapter<Movie> movieAdapterEasyAdapter = new EasyAdapter<Movie>(getContext(), MovieAdapter.class, product.getMovies());
+        EasyAdapter<Movie> movieAdapterEasyAdapter = new EasyAdapter<>(getContext(), MovieAdapter.class, product.getMovies());
         llvVideo.setAdapter(movieAdapterEasyAdapter);
     }
 }

@@ -28,7 +28,6 @@ public class MovieServer {
     }
 
     public MovieServer(String title) {
-
         this.title = title;
     }
 

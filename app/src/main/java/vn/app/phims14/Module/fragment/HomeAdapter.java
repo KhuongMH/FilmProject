@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import org.askerov.dynamicgrid.BaseDynamicGridAdapter;
 import java.util.List;
+
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Classes.MovieEpisode;
 import vn.app.phims14.Module.VideoActivity;
 import vn.app.phims14.R;
@@ -36,6 +38,15 @@ public class HomeAdapter<T> extends BaseDynamicGridAdapter {
         holder.btVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                for(String s : GlobalVariable.historyFilm){
+                    if(!s.equalsIgnoreCase(movieEpisode.getMovieName())){
+                        GlobalVariable.historyFilm.add(movieEpisode.getMovieName());
+                    } else {
+                        break;
+                    }
+                }
+
                 Intent intent = new Intent(getContext(), VideoActivity.class);
                 intent.putExtra("urlVideo", movieEpisode.getUrl());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

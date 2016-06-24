@@ -16,28 +16,32 @@ import vn.app.phims14.Service.BroadcastService;
  */
 public class BeginActivity extends AppCompatActivity {
 
-
+    private boolean flag = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.begin_activity);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle == null) {
+        if (bundle != null) {
+            if(bundle.getBoolean("newMovie", false)){
+                Intent intent = new Intent(BeginActivity.this, NewMoviesActivity.class);
+                startActivity(intent);
+                flag = true;
+            }
+        }
+        if(!flag){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent next = new Intent(BeginActivity.this,HomeActivity.class);
+                    Intent next = new Intent(BeginActivity.this, HomeActivity.class);
                     startActivity(next);
                 }
             }, 2000);
-        } else {
-            Intent intent = new Intent(BeginActivity.this, NewMoviesActivity.class);
-            startActivity(intent);
         }
-        if(!GlobalVariable.hasRunBroadcastService){
+        if (!GlobalVariable.hasRunBroadcastService) {
             GlobalVariable.hasRunBroadcastService = true;
-            Intent intent  = new Intent(this, BroadcastService.class);
+            Intent intent = new Intent(this, BroadcastService.class);
             startService(intent);
         }
     }

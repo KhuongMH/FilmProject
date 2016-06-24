@@ -120,6 +120,7 @@ public class HomeActivity extends FragmentActivity {
         MobileAds.initialize(this, GlobalVariable.ADMOB_INTERSTITIAL_AD_ID);
         mAdView = (AdView) findViewById(R.id.ad_view);
         AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -275,32 +276,6 @@ public class HomeActivity extends FragmentActivity {
     }
 
     EasyAdapter<Category> categoryDAOEasyAdapter;
-
-//    public Boolean LoadGoogleAds() {
-//        mExitAdId = mAds.loadIntelAd(AdsManager.AdStock.Admob, new AdsManager.AdListener() {
-//            @Override
-//            public void onAdError(int errCode, String msgErr) {
-//                LoadFacebookAds();
-//            }
-//
-//            @Override
-//            public void onAdDismissed() {
-//
-//            }
-//
-//            @Override
-//            public void onAdLoaded() {
-//                mAds.showInterstitialAd(mExitAdId);
-//            }
-//
-//            @Override
-//            public void onRequestReload() {
-//
-//            }
-//        });
-//        return true;
-//    }
-
     public void checkLogin() {
 
     }
@@ -308,12 +283,8 @@ public class HomeActivity extends FragmentActivity {
     public List<Category> ConvertJsonToCategories(String jsonString) {
         List<Category> list = new ArrayList<>();
         Category tmp = new Category();
-        tmp.setCategoryName("Phim Bộ");
+        tmp.setCategoryName("Phim Truyền Hình");
         tmp.setSlug("phim-bo");
-        list.add(tmp);
-        tmp = new Category();
-        tmp.setCategoryName("Phim Lẻ");
-        tmp.setSlug("phim-le");
         list.add(tmp);
         try {
             JSONArray array = new JSONArray(jsonString);

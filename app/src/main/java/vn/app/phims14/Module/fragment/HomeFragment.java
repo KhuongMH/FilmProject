@@ -33,6 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import uk.co.ribot.easyadapter.EasyAdapter;
+import vn.app.phims14.Classes.GlobalVariable;
 import vn.app.phims14.Classes.MainPageBanner;
 import vn.app.phims14.Classes.Movie;
 import vn.app.phims14.Classes.Product;
@@ -51,7 +52,6 @@ public class HomeFragment extends Fragment {
     private int mActiveScreenId = 1;
     ListView lvVideo;
     EasyAdapter<Product> movieDAOEasyAdapter;
-    public static List<Product> products = new ArrayList<>();
     public static List<MainPageBanner> mainPageBanners = new ArrayList<>();
     public static int BANNER_NUMBER = 0;
     ProgressDialog progressDialog;
@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.banner_pager);
         frameLayout = (FrameLayout) view.findViewById(R.id.fl_slider);
         lvVideo = (ListView) view.findViewById(R.id.lv_video);
-        movieDAOEasyAdapter = new EasyAdapter<>(getContext(), GroupAdapter.class, products);
+        movieDAOEasyAdapter = new EasyAdapter<>(getContext(), GroupAdapter.class, GlobalVariable.mainPageMovies);
         lvVideo.setAdapter(movieDAOEasyAdapter);
         //Check existed on sharedReferrence
 //        if (HomeActivity.PREFERENCES == null) {
@@ -162,14 +162,14 @@ public class HomeFragment extends Fragment {
     private void setupScreenList() {
         mScreenList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            mScreenList.add(new ImageFragment(products.get(i).getMovies().get(i + 1),
+            mScreenList.add(new ImageFragment(GlobalVariable.mainPageMovies.get(i).getMovies().get(i + 1),
                     mainPageBanners.get(i).getUrl()));
         }
     }
 
-    public List<Product> ConvertJsonToProducts(String jsonString) {
-        List<Product> list = new ArrayList<>();
+    public void ConvertJsonToProducts(String jsonString) {
         try {
+            GlobalVariable.mainPageMovies.clear();
             JSONObject tmp = new JSONObject(jsonString);
             JSONArray listProduct = tmp.getJSONArray("listproduct");
             Product product = null;
@@ -179,11 +179,11 @@ public class HomeFragment extends Fragment {
                     product = new Product("PHIM S14 ĐỀ XUẤT");
                 }
                 if (i == 8) {
-                    list.add(product);
+                    GlobalVariable.mainPageMovies.add(product);
                     product = new Product("PHIM MỚI");
                 }
                 if (i == 16) {
-                    list.add(product);
+                    GlobalVariable.mainPageMovies.add(product);
                     product = new Product("PHIM HOT");
                 }
                 product.getMovies().add(new Movie(obj.getString("url"),
@@ -192,11 +192,10 @@ public class HomeFragment extends Fragment {
                         obj.getString("id"),
                         obj.getString("idYoutube")));
             }
-            list.add(product);
+            GlobalVariable.mainPageMovies.add(product);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
     }
 
     public List<MainPageBanner> ConvertJsonToBanners(String jsonString) {
@@ -241,7 +240,7 @@ public class HomeFragment extends Fragment {
                 while ((temp = bReader.readLine()) != null) {
                     response += temp;
                 }
-                products = ConvertJsonToProducts(response);
+                ConvertJsonToProducts(response);
                 mainPageBanners = ConvertJsonToBanners(response);
 
 //                //Save data to sharedReference
@@ -260,8 +259,8 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
 
-            if (!mainPageBanners.isEmpty() && !products.isEmpty()) {
-                movieDAOEasyAdapter.setItems(products);
+            if (!mainPageBanners.isEmpty() && !GlobalVariable.mainPageMovies.isEmpty()) {
+                movieDAOEasyAdapter.setItems(GlobalVariable.mainPageMovies);
                 movieDAOEasyAdapter.notifyDataSetChanged();
                 initSlider();
             }

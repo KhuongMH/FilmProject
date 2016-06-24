@@ -24,10 +24,14 @@ public class GlobalVariable {
 
     public static SharedPreferences PREFERENCES = null;
     public static SharedPreferences.Editor PREF_EDITOR = null;
-    public static UserAccount CURRENT_USER = new UserAccount();
     public static Context APPLICATION_CONTEXT = null;
     public static List<Movie> newMovies = new ArrayList<>();
     public static boolean hasRunBroadcastService = false;
+
+    public static List<Movie> searchMovies = new ArrayList<>();
+    public static List<Product> mainPageMovies = new ArrayList<>();
+
+    public static List<String> historyFilm = new ArrayList<>();
 
     public static String createQueryWithParameters(List<NameValuePair> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();

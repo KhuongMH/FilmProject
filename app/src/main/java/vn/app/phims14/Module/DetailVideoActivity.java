@@ -51,6 +51,7 @@ import vn.app.phims14.Classes.Movie;
 import vn.app.phims14.Classes.MovieEpisode;
 import vn.app.phims14.Classes.MovieInfo;
 import vn.app.phims14.Classes.MovieServer;
+import vn.app.phims14.Classes.Product;
 import vn.app.phims14.Module.fragment.InfoFragment;
 import vn.app.phims14.Module.fragment.ReviewFragment;
 import vn.app.phims14.Module.fragment.VideoFragment;
@@ -306,7 +307,7 @@ public class DetailVideoActivity extends FragmentActivity {
                         for (MovieServer server : info.getMovieServers()) {
                             if (server.getTitle().equalsIgnoreCase(tmp.getString("server"))) {
                                 server.getMovieEpisodes().add(new MovieEpisode(tmp.getString("Eps"),
-                                        tmp.getString("url")));
+                                        tmp.getString("url"),""));
                             }
                         }
                     }
@@ -443,9 +444,23 @@ public class DetailVideoActivity extends FragmentActivity {
                     response += temp;
                 }
 
+                //Update Local Rating.
+                for(Movie movie : GlobalVariable.searchMovies){
+                    if(movie.getIdMovie().equalsIgnoreCase(info.getId())){
+                        movie.setRate(response);
+                    }
+                }
+                for(Product product : GlobalVariable.mainPageMovies){
+                    for(Movie movie : product.getMovies()){
+                        if(movie.getIdMovie().equalsIgnoreCase(info.getId())){
+                            movie.setRate(response);
+                        }
+                    }
+                }
                 return response;
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
             return null;
         }

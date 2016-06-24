@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -42,7 +43,6 @@ public class SearchMovieActivity extends Activity {
     DynamicGridView gridView;
     EditText et_search;
     TextView tv_title;
-    List<Movie> movieList = new ArrayList<>();
     ProgressDialog progressDialog;
     EasyAdapter<Movie> movieAdapter;
 
@@ -54,7 +54,7 @@ public class SearchMovieActivity extends Activity {
         gridView = (DynamicGridView) findViewById(R.id.dynamic_grid);
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_title.setText(getIntent().getStringExtra("categoryName"));
-        movieAdapter = new EasyAdapter<>(getApplication(), MovieAdapter.class, movieList);
+        movieAdapter = new EasyAdapter<>(getApplication(), MovieAdapter.class, GlobalVariable.searchMovies);
         gridView.setAdapter(movieAdapter);
         ButterKnife.bind(this);
         new getListFilms().execute("2000");
@@ -77,7 +77,7 @@ public class SearchMovieActivity extends Activity {
 
     public void updateUI(String search) {
         if (search.isEmpty()) {
-            movieAdapter.setItems(movieList);
+            movieAdapter.setItems(GlobalVariable.searchMovies);
         } else {
             String[] s = search.split(" ");
             String text = "";
@@ -86,7 +86,7 @@ public class SearchMovieActivity extends Activity {
                 else text += s[i] + "-";
             }
             List<Movie> searchList = new ArrayList<>();
-            for (Movie movie : movieList) {
+            for (Movie movie : GlobalVariable.searchMovies) {
                 if (movie.getUrl().contains(text) || movie.getTitle().contains(search)) {
                     searchList.add(movie);
                 }
@@ -118,6 +118,7 @@ public class SearchMovieActivity extends Activity {
 
         @Override
         protected String doInBackground(String... quantity) {
+            GlobalVariable.searchMovies.clear();
             String stringURL = "http://s14.com.vn/Mobile/get100VideoByCategory";
             try {
                 URL url = new URL(stringURL);
@@ -147,7 +148,7 @@ public class SearchMovieActivity extends Activity {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        movieList.add(new Movie(jsonObject.getString("url"),
+                        GlobalVariable.searchMovies.add(new Movie(jsonObject.getString("url"),
                                 jsonObject.getString("title"),
                                 jsonObject.getString("rate"),
                                 jsonObject.getString("id"),

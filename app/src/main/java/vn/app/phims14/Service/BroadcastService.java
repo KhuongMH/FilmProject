@@ -74,7 +74,7 @@ public class BroadcastService extends Service {
         @Override
         protected Void doInBackground(Void... params) {
             GlobalVariable.newMovies.clear();
-            String urlString = "?";
+            String urlString = "/Mobile/GetNewPhim";
             TelephonyManager telephonyManager = (TelephonyManager) GlobalVariable.APPLICATION_CONTEXT.getSystemService(Context.TELEPHONY_SERVICE);
 
             try {
@@ -101,8 +101,27 @@ public class BroadcastService extends Service {
                     response += temp;
                 }
                 JSONArray jsonArray = new JSONArray(response);
+                boolean oldMovie = false;
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject object = jsonArray.getJSONObject(i);
+
+                    //Checking new movie with history and last "new" movie.
+                    for (String s : GlobalVariable.historyFilm){
+                        if(s.equalsIgnoreCase(object.getString("title"))){
+                            oldMovie = true;
+                            break;
+                        }
+                    }
+                    for(Movie movie : GlobalVariable.newMovies){
+                        if (movie.getTitle().equalsIgnoreCase(object.getString("title"))){
+                            oldMovie = true;
+                            break;
+                        }
+                    }
+                    if(oldMovie) {
+                        oldMovie = false;
+                        continue;
+                    }
                     GlobalVariable.newMovies.add(new Movie(object.getString("url"),
                             object.getString("title"),
                             object.getString("rate"),
